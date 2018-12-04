@@ -1,0 +1,33 @@
+
+expensedata <- read.csv("SpendHistory.csv")
+#View(expensedata)
+expensedata2 <- filter(expensedata,Amount > 0)
+#View(expensedata2)
+
+dt <- as.character(expensedata2$Trans..Date)
+class(dt)
+
+my_month = month(as.POSIXlt(dt,format= "%m/%d/%y"))
+my_month = as.character(my_month)
+
+my_yr = year(as.POSIXlt(dt,format = "%m/%d/%y"))
+my_yr = as.character(my_yr)
+
+Description <- expensedata2$Description
+Amount <- expensedata2$Amount
+Category <- expensedata2$Category
+
+
+new_expense <- data.frame(my_month,my_yr,Description,Amount,Category)
+View(new_expense)
+class(new_expense)
+exp2017 <- filter(new_expense,my_yr==2017)
+head(exp2017)
+exp2018 <- filter(new_expense,my_yr==2018)
+head(exp2018)
+summarise(group_by(exp2017,my_month,Category), expense = sum(Amount))
+category_expense2017 <- summarise(group_by(exp2017,my_month,Category), expense = sum(Amount))
+View(category_expense2017)
+summarise(group_by(exp2018,my_month,Category), expense = sum(Amount))
+category_expense2018 <- summarise(group_by(exp2018,my_month,Category), expense = sum(Amount))
+View(category_expense2018)
